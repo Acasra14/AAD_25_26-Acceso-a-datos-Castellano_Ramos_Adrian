@@ -28,3 +28,18 @@
     base de datos: prueba
     puerto: 5432
     Host: localhost
+
+# 5. Explicación de JDBC y su papel en la aplicación
+    JDBC es una API que permite a las aplicaciones Java conectarse y ejecutar consultas en bases de datos. En la aplicación, JDBC se utiliza para gestionar la comunicación entre el código Java y la base de datos PostgreSQL, permitiendo realizar operaciones como consultas, inserciones, actualizaciones y eliminaciones de datos.
+
+# 6. Breve descripción del application.yml y del código de prueba.
+    El archivo application.yml contiene la configuración necesaria para que la aplicación Java pueda conectarse a la base de datos PostgreSQL. Incluye detalles como la URL de conexión, el nombre de usuario y la contraseña. El código de prueba utiliza esta configuración para establecer una conexión con la base de datos y realizar operaciones básicas, verificando que la conexión se ha establecido correctamente y que las consultas funcionan según lo esperado.
+
+# 7. Pasos para ejecutar el contenedor y verificar la conexión desde IntelliJ.
+    1. Abre IntelliJ y navega hasta la carpeta resources donde se encuentra el archivo docker-compose.yml.
+    2. Abre una terminal dentro de IntelliJ.
+    3. Ejecuta el comando `docker compose up -d` para levantar el contenedor de PostgreSQL.
+    4. Espera unos momentos para que el contenedor se inicie completamente.
+    5. Configura la conexión a la base de datos en tu aplicación Java utilizando los parámetros definidos en el archivo application.yml.
+    6. Ejecuta el código de prueba para verificar que la conexión a la base de datos se ha establecido correctamente y que las operaciones funcionan como se espera.
+    7. Si todo funciona correctamente, deberías ver resultados positivos en la consola o en los logs de la aplicación.
