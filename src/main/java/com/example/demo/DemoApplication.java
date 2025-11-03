@@ -28,6 +28,9 @@ public class DemoApplication implements CommandLineRunner {
                     conn.getMetaData().getURL());
             log.info("Database: {}",
                     conn.getMetaData().getDatabaseProductName());
+
+            postgresqlDriver.init();
+
         } catch (Exception e) {
             log.error("Connection failed: {}", e.getMessage());
         }

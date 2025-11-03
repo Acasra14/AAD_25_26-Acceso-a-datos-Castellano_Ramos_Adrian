@@ -43,3 +43,12 @@
     5. Configura la conexión a la base de datos en tu aplicación Java utilizando los parámetros definidos en el archivo application.yml.
     6. Ejecuta el código de prueba para verificar que la conexión a la base de datos se ha establecido correctamente y que las operaciones funcionan como se espera.
     7. Si todo funciona correctamente, deberías ver resultados positivos en la consola o en los logs de la aplicación.
+
+# 8.Ampliación de funcionalidad en la clase PostgresqlDriver.java
+    He añadido métodos para realizar operaciones CRUD (Crear, Leer, Actualizar, Eliminar) en la base de datos. Estos métodos permiten insertar nuevos registros, consultar datos existentes, actualizar registros y eliminar registros de una tabla específica en la base de datos PostgreSQL. Además, he implementado manejo de excepciones para asegurar que cualquier error durante las operaciones de la base de datos sea capturado y gestionado adecuadamente.
+
+# 9. Resumen del modelo relacional: descripción de las tablas
+    El modelo relacional consta de tres tablas principales: ALUMNO, MODULO y MATRICULA. La tabla ALUMNO contiene información sobre los estudiantes, incluyendo su ID, nombre y email. La tabla MODULO almacena detalles sobre los módulos disponibles, como su ID, nombre y horas. La tabla MATRICULA actúa como una tabla intermedia que relaciona a los alumnos con los módulos en los que están matriculados, utilizando claves foráneas que hacen referencia a las tablas ALUMNO y MODULO. 
+
+# 10. Diagrama relacional simple en texto:
+▪ ALUMNO (1) ───< (N) MATRICULA (N) >─── (1) MODULO
