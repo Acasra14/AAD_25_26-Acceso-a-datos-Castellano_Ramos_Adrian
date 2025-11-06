@@ -26,14 +26,12 @@ public class StudentService implements CustomService<Student> {
      */
     @Override
     public boolean validate(Student entity) {
-        return (entity.getDni().isBlank() && entity.getName().isBlank());
+        return (entity.getDni() >0 && entity.getName().isBlank());
     }
 
-    public Student createStudent(final Student student, List<Modules> modules) {
+    public Student createStudent(final Student student){
         if (validate(student)) {
-            for (Modules module : modules) {
-                moduleRepository.create(module);
-            }
+
             return StudentRepository.create(student);
         }
         return null;

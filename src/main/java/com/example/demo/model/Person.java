@@ -11,9 +11,9 @@ import lombok.ToString;
 @ToString
 public class Person {
 
-    private String dni;
+    private int dni;
     private String name;
-    private String surname;
+    private String email;
 
 //    public Person() {
 //
