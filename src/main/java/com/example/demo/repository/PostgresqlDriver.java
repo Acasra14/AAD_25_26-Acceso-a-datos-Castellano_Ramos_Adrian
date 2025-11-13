@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.repository;
 
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +22,8 @@ public class PostgresqlDriver {
     private final String username;
     private final String password;
     private final String driverClassName;
+    @Value("classpath*:sql/*.sql")
+    private Resource[] scripts;
 
     public PostgresqlDriver(
             @Value("${spring.datasource.url}") String url,
@@ -43,16 +45,15 @@ public class PostgresqlDriver {
         return DriverManager.getConnection(url, username, password);
     }
 
-    @Value("classpath*:sql/*.sql")
-    private Resource[] scripts;
     @PostConstruct
     public void init() {
-        log.info("🛠️ Initializing database...");
+        log.info("Initializing database...");
         for (Resource script : scripts) {
             executeSql(script);
         }
-        log.info("✅ Database initialized successfully!");
+        log.info("Database initialized successfully!");
     }
+
     private void executeSql(Resource resource) {
         try (Connection conn = getConnection();
              Statement stmt = conn.createStatement();
@@ -60,9 +61,9 @@ public class PostgresqlDriver {
                      InputStreamReader(resource.getInputStream()))) {
             String sql = reader.lines().collect(Collectors.joining("\n"));
             stmt.execute(sql);
-            log.info("📄 Executed script: {}", resource.getFilename());
+            log.info("Executed script: {}", resource.getFilename());
         } catch (Exception e) {
-            log.error("⚠️ Error executing script {}: {}",
+            log.error("Error executing script {}: {}",
                     resource.getFilename(), e.getMessage());
         }
     }
