@@ -122,8 +122,8 @@ public class StudentRepository {
                 rs.getString("nif"),
                 rs.getString("nombre"),
                 rs.getString("email"),
-                null, // curse
-                null  // modules
+                null,
+                null
         );
     }
 }

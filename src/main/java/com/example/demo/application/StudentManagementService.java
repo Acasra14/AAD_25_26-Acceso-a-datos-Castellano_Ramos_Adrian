@@ -32,7 +32,6 @@ public class StudentManagementService {
             return existingModule;
         }
 
-        // Validate module data
         if (module.getCode() == null || module.getCode().trim().isEmpty() ||
                 module.getName() == null || module.getName().trim().isEmpty() ||
                 module.getHours() == null || module.getHours() <= 0) {
@@ -43,12 +42,10 @@ public class StudentManagementService {
     }
 
     public Student createStudent(Student student) {
-        // Validate student data
         if (!validate(student)) {
             throw new IllegalArgumentException("Invalid student data");
         }
 
-        // Check if student with same NIF already exists
         List<Student> allStudents = studentRepository.findAll();
         boolean nifExists = allStudents.stream()
                 .anyMatch(s -> s.getNif().equals(student.getNif()));
@@ -64,13 +61,11 @@ public class StudentManagementService {
         try {
             postgresqlDriver.beginTransaction();
 
-            // Validate student exists
             Student student = studentRepository.findById(studentId);
             if (student == null) {
                 throw new IllegalArgumentException("Student not found: " + studentId);
             }
 
-            // Validate module exists
             Module module = moduleRepository.findById(moduleId);
             if (module == null) {
                 throw new IllegalArgumentException("Module not found: " + moduleId);

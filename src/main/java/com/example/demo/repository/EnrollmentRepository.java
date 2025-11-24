@@ -106,13 +106,12 @@ public class EnrollmentRepository {
     }
 
     public void createEnrollment(Enrollment enrollment, List<Module> modules) {
-        // This method will be called within a transaction managed by StudentManagementService
         create(enrollment);
     }
 
     private Enrollment mapRow(ResultSet rs) throws SQLException {
         return new Enrollment(
-                null, // id is not in the primary key in the schema
+                null,
                 rs.getInt("id_alumno"),
                 rs.getInt("id_modulo"),
                 rs.getDate("fecha").toLocalDate()

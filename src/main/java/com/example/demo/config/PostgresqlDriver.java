@@ -50,7 +50,6 @@ public class PostgresqlDriver implements CommandLineRunner {
         }
 
         String sql = readResource(script);
-        // Mejor división de statements para funciones PL/pgSQL
         String[] statements = sql.split(";(?=(?:[^$]*\\$\\$[^$]*\\$\\$)*[^$]*$)");
 
         try (Connection conn = dataSource.getConnection();
@@ -64,7 +63,6 @@ public class PostgresqlDriver implements CommandLineRunner {
                         log.debug("Executed SQL statement successfully");
                     } catch (Exception e) {
                         log.warn("Could not execute statement: {}", e.getMessage());
-                        // No lanzar excepción para continuar con otros statements
                     }
                 }
             }
@@ -78,7 +76,6 @@ public class PostgresqlDriver implements CommandLineRunner {
         }
     }
 
-    // Métodos para gestión manual de transacciones - CORREGIDOS
     private Connection currentConnection;
 
     public void beginTransaction() {
@@ -116,7 +113,6 @@ public class PostgresqlDriver implements CommandLineRunner {
             }
         } catch (Exception e) {
             log.error("Error during rollback: {}", e.getMessage());
-            // No lanzar excepción para evitar enmascarar el error original
         } finally {
             currentConnection = null;
         }
