@@ -1,6 +1,5 @@
 package com.example.demo.application;
 
-import com.example.demo.config.PostgresqlDriver;
 import com.example.demo.model.Enrollment;
 import com.example.demo.model.Module;
 import com.example.demo.model.Student;
@@ -10,6 +9,7 @@ import com.example.demo.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -22,10 +22,8 @@ public class StudentManagementService {
     private final StudentRepository studentRepository;
     private final ModuleRepository moduleRepository;
     private final EnrollmentRepository enrollmentRepository;
-    private final PostgresqlDriver postgresqlDriver;
 
     public Module createModule(Module module) {
-        // Check if module with same code already exists
         Module existingModule = moduleRepository.findByCode(module.getCode());
         if (existingModule != null) {
             log.info("Module already exists with code: {}", module.getCode());
@@ -57,32 +55,23 @@ public class StudentManagementService {
         return studentRepository.insert(student);
     }
 
+    @Transactional
     public Enrollment enrollStudentInModule(Integer studentId, Integer moduleId) {
-        try {
-            postgresqlDriver.beginTransaction();
-
-            Student student = studentRepository.findById(studentId);
-            if (student == null) {
-                throw new IllegalArgumentException("Student not found: " + studentId);
-            }
-
-            Module module = moduleRepository.findById(moduleId);
-            if (module == null) {
-                throw new IllegalArgumentException("Module not found: " + moduleId);
-            }
-
-            Enrollment enrollment = new Enrollment(null, studentId, moduleId, LocalDate.now());
-            Enrollment created = enrollmentRepository.create(enrollment);
-
-            postgresqlDriver.commit();
-            log.info("Student {} successfully enrolled in module {}", studentId, moduleId);
-            return created;
-
-        } catch (Exception e) {
-            log.error("Error enrolling student in module: {}", e.getMessage());
-            postgresqlDriver.rollback();
-            throw new RuntimeException("Error enrolling student in module: " + e.getMessage(), e);
+        Student student = studentRepository.findById(studentId);
+        if (student == null) {
+            throw new IllegalArgumentException("Student not found: " + studentId);
         }
+
+        Module module = moduleRepository.findById(moduleId);
+        if (module == null) {
+            throw new IllegalArgumentException("Module not found: " + moduleId);
+        }
+
+        Enrollment enrollment = new Enrollment(null, studentId, moduleId, LocalDate.now());
+        Enrollment created = enrollmentRepository.create(enrollment);
+
+        log.info("Student {} successfully enrolled in module {}", studentId, moduleId);
+        return created;
     }
 
     public boolean validate(Student student) {
