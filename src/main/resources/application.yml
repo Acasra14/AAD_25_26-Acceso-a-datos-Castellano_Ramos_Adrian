@@ -10,3 +10,4 @@ spring:
       schema-locations:
         - classpath:sql/ddl/01_schema.sql
         - classpath:sql/ddl/02_procedures.sql
+      separator: "@@"

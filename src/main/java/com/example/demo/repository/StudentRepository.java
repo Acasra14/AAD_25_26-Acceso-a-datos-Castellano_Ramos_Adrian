@@ -22,8 +22,8 @@ public class StudentRepository {
     private final JdbcTemplate jdbcTemplate;
 
     private static final String SQL_INSERT = """
-        INSERT INTO alumno (nif, nombre, email, curso) 
-        VALUES (?, ?, ?, ?)
+        INSERT INTO alumno (nif, nombre, email) 
+        VALUES (?, ?, ?)
         """;
     private static final String SQL_FIND_ALL = "SELECT * FROM alumno";
     private static final String SQL_FIND_BY_ID = "SELECT * FROM alumno WHERE id_alumno = ?";
@@ -33,38 +33,48 @@ public class StudentRepository {
         """;
     private static final String SQL_DELETE = "DELETE FROM alumno WHERE id_alumno = ?";
 
-    private final RowMapper<Student> rowMapper = (rs, rowNum) -> new Student(
-            rs.getInt("id_alumno"),
-            rs.getString("nif"),
-            rs.getString("nombre"),
-            rs.getString("email"),
-            rs.getString("curso"),
-            null
-    );
-
     public Student insert(Student student) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
-            PreparedStatement ps = connection.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement ps = connection.prepareStatement(
+                    SQL_INSERT,
+                    new String[]{"id_alumno"}
+            );
             ps.setString(1, student.getNif());
             ps.setString(2, student.getName());
             ps.setString(3, student.getEmail());
-            ps.setString(4, student.getCurse());
             return ps;
         }, keyHolder);
 
-        student.setId(Objects.requireNonNull(keyHolder.getKey()).intValue());
-        log.info("Student inserted: {}", student);
+        Integer generatedId = keyHolder.getKey().intValue();
+        student.setId(generatedId);
+
+        log.info("Successfully added student with ID {}: {}", generatedId, student);
         return student;
-    }
+}
 
     public List<Student> findAll() {
-        return jdbcTemplate.query(SQL_FIND_ALL, rowMapper);
-    }
+        return jdbcTemplate.query(
+                SQL_FIND_ALL,
+                (rs, rowNum) -> new Student(
+                        rs.getInt("id_alumno"),
+                        rs.getString("nif"),
+                        rs.getString("nombre"),
+                        rs.getString("email"),
+                        null
+                )
+);}
 
     public Student findById(int id) {
-        List<Student> students = jdbcTemplate.query(SQL_FIND_BY_ID, rowMapper, id);
+        List<Student> students = jdbcTemplate.query(SQL_FIND_BY_ID,
+                (rs, rowNum) -> new Student(
+                    rs.getInt("id_alumno"),
+                    rs.getString("nif"),
+                    rs.getString("nombre"),
+                    rs.getString("email"),
+                    null
+        ), id);
         return students.isEmpty() ? null : students.get(0);
     }
 
@@ -73,7 +83,6 @@ public class StudentRepository {
                 student.getNif(),
                 student.getName(),
                 student.getEmail(),
-                student.getCurse(),
                 student.getId());
 
         if (affectedRows > 0) {

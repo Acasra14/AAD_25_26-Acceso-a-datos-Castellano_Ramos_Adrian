@@ -78,8 +78,7 @@ public class StudentManagementService {
         return student != null &&
                 student.getNif() != null && !student.getNif().trim().isEmpty() &&
                 student.getName() != null && !student.getName().trim().isEmpty() &&
-                student.getEmail() != null && !student.getEmail().trim().isEmpty() &&
-                student.getCurse() != null && !student.getCurse().trim().isEmpty();
+                student.getEmail() != null && !student.getEmail().trim().isEmpty();
     }
 
     public int getStudentEnrollmentCount(int studentId) {

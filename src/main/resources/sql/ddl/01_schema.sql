@@ -19,3 +19,4 @@ CREATE TABLE IF NOT EXISTS matricula (
     fecha DATE DEFAULT CURRENT_DATE,
     PRIMARY KEY (id_alumno, id_modulo)
     );
+@@
