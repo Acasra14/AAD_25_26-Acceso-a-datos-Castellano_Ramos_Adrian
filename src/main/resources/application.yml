@@ -1,12 +1,14 @@
-spring:
+pring:
   datasource:
     url: jdbc:postgresql://localhost:5432/prueba
     username: admin
     password: admin
-    driver-class-name: org.postgresql.Driver
-  sql:
-    init:
-      mode: always
-      schema-locations:
-        - classpath:sql/ddl/01_schema.sql
-        - classpath:sql/ddl/02_procedures.sql
+    hikari:
+    maximum-pool-size: 5
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true

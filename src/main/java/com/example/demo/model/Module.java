@@ -1,15 +1,25 @@
 package com.example.demo.model;
 
-import lombok.AllArgsConstructor;
+import jakarta.persistence.*;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.ToString;
+import java.util.List;
+import java.util.ArrayList;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Entity
+@Table(name = "modules")
 public class Module {
-    private Integer id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String code;
     private String name;
     private Integer hours;
+
+    @OneToMany(mappedBy = "module", cascade = CascadeType.ALL)
+    @ToString.Exclude
+    private List<Enrollment> enrollments = new ArrayList<>();
 }

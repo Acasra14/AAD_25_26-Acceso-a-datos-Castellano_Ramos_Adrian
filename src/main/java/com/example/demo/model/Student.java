@@ -1,18 +1,29 @@
 package com.example.demo.model;
 
-import lombok.AllArgsConstructor;
+import jakarta.persistence.*;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.ToString;
+
 import java.util.List;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Entity
+@Table(name = "students")
 public class Student {
-    private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String nif;
     private String name;
     private String email;
-    private String curse;
-    private List<Module> modules;
+    private String course;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "profile_id", referencedColumnName = "id")
+    private Profile profile;
+
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
+    @ToString.Exclude
+    private List<Enrollment> enrollments;
 }
